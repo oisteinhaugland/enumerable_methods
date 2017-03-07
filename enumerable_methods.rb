@@ -1,49 +1,68 @@
 
 #.each takes a block and does something based on the items in an array.
 module Enumerable
+
 	def my_each
+		return to_enum(:my_each) unless block_given?
+
 		for element in self
 			yield(element)
-		end
+		end	
 	end
 
 
 	def my_each_with_index
 		index = 0
+		return to_enum(:my_each_with_index) unless block_given?
+
 		for element in self
 			yield(element,index)
 			index+=1
 		end
 	end
 
-#hmm
 	def my_select(&block)
-		for element in self
-			yield(element)
+		result = []
+		return to_enum(:my_select) unless block_given?
+
+		for elements in self
+			if yield(element)
+				result.push(element)
+			end
 		end
+		result
 	end
+
+	def my_all?
+		result = true
+		if block_given?
+			for elements  in self
+				yield(element) ? next : result = false
+			end
+		else
+			counter = 0
+			for element in self do 
+				if self[counter] == nil || self[counter] == false
+					result = false
+				end
+				counter +=1
+			end
+		end
+		result
+	end
+
 end
 
 
-test = [5,1,20,150,9,5]
 
-#test.my_each_with_index do |x,y|
-	#puts y
-#end
+test = [53,1,20,5,9,5]
 
-test.select do |x|
-	p x == 5
-end
+bob = test.my_all? 
+
+p bob
 
 
 =begin
-
-	
-
-	def my_all?
-
-	end
-
 	def my_any?
 
 	end
