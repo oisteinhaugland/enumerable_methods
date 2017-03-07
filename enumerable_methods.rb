@@ -37,7 +37,7 @@ module Enumerable
 		result = true
 		if block_given?
 			for elements  in self
-				yield(element) ? next : result = false
+				yield(elements) ? next : result = false
 			end
 		else
 			counter = 0
@@ -57,7 +57,9 @@ end
 
 test = [53,1,20,5,9,5]
 
-bob = test.my_all? 
+bob = test.my_all? do |x|
+	x.is_a? (Integer)
+end
 
 p bob
 
