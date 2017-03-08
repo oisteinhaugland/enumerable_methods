@@ -24,10 +24,9 @@ module Enumerable
 	def my_select(&block)
 		result = []
 		return to_enum(:my_select) unless block_given?
-
 		for elements in self
-			if yield(element)
-				result.push(element)
+			if yield(elements)
+				result.push(elements)
 			end
 		end
 		result
@@ -51,31 +50,80 @@ module Enumerable
 		result
 	end
 
-end
+
+	def my_any?
+		result = false
+		if block_given?
+			for elements  in self
+				yield(elements) ? result = true: next
+			end
+		else
+			counter = 0
+			for element in self do 
+				if self[counter] != nil || self[counter] != false
+					result = true
+				end
+				counter +=1
+			end
+		end
+		result
+	end
+
+	def my_none?
+		result = true
+		if block_given?
+			for elements in self
+				yield(elements) ? result = false : next
+			end
+		else
+			counter = 0
+			for element in self do 
+				if self[counter] == true
+					result = false
+				end
+				counter +=1
+			end
+		end
+		result
+	end
+
+	def my_count(parameter = (no_argument_passed = true;))
+		count = 0
+		
+		if no_argument_passed && !block_given? 
+			for elements in self
+				count += 1
+			end	
+		elsif block_given?	
+				for elements in self
+					yield(elements) ? count += 1 : next
+				end
+		else
+			iterator = 0
+			for elements in self
+				count += 1 if parameter== self[iterator]
+				iterator +=1
+			end
+		end
+		count
+	end
+
+end #module end
 
 
 
-test = [53,1,20,5,9,5]
-
-bob = test.my_all? do |x|
-	x.is_a? (Integer)
+test = ["bob",52,"test",1,2,3,2]
+bob = test.my_count do |x|
+	x == 2
 end
 
 p bob
 
 
 =begin
-	def my_any?
+	
 
-	end
-
-	def my_none?
-
-	end
-
-	def my_count
-
-	end
+	
 
 	def my_map
 	end
