@@ -110,33 +110,46 @@ module Enumerable
 
 
 	#my_map! would be another method that changes the given array instead of a new one.
-	def my_map
-		return to_enum(:my_map) unless block_given?
+	
+	def my_map(proc = nil)
+		#denne skal kunne ta enten en proce eller en block
+=begin
 		mapped_array = []
 		for elements in self
-			mapped_array.push(yield(elements))
+			mapped_array.push(proc.call)
 		end
 		mapped_array
+
+		#return to_enum(:my_map) unless block_given?
+		#mapped_array = []
+		#for elements in self
+		#	mapped_array.push(yield(elements))
+		#end
+		#mapped_array
+=end
 	end
 
 
 	#Apparently the inject and reduce methods are aliases. There is no performance benefit to either.
 
+	
+	#this can apparently be done in 3 lines of code.
 	def my_reduce(argument = (no_argument_passed = true), args = {})
-		sum = nil
 		
-	 #if a block is given -> for each element in the array, yield the block. 
-	 #how the hell do i check which binary operator the block sends.  
-	 #And how do i save that value in a variable.  
-	 #Result should be => you can multiply all elements together.
-
-		if block_given? && (argument.is_a? (Integer))
-			accumulator = argument
+		sum = nil
+	
+		#fix here
+		if block_given? 
+			if (argument.is_a? (Integer))
+				accumulator = argument
+			end
+			
 			for value in self
 				 accumulator = yield(accumulator,value)
 			end
 			return accumulator
 		end
+
 
 
 		if (argument.is_a? (Integer)) && (args.is_a? (Symbol))  #If you pass an integer and a symbol
@@ -170,14 +183,25 @@ module Enumerable
 	end
 end #Enumerable module end
 	
-	def multiply_els(numbers)
-		result = numbers.my_reduce(:*)
-	end
-
-test = [2,4,5]
+def multiply_els(numbers)
+	result = numbers.my_reduce(:*)	
+end
 
 
-per =  test.my_reduce(1) { |x,y| x*y }
 
-p per
-p multiply_els(test)
+p = Proc.new {|x| x * 2 }
+
+someNumbers = [2,4,5]
+
+#test = someNumbers.my_map do |x|
+	#x*2
+#end
+
+p someNumbers.my_map(&p)
+
+
+
+
+#p multiply_els(someNumbers)
+
+
