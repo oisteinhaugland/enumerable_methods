@@ -125,15 +125,17 @@ module Enumerable
 	def my_reduce(argument = (no_argument_passed = true), args = {})
 		sum = nil
 		
-#if a block is given -> for each element in the array, yield the block.
+	 #if a block is given -> for each element in the array, yield the block. 
+	 #how the hell do i check which binary operator the block sends.  
+	 #And how do i save that value in a variable.  
+	 #Result should be => you can multiply all elements together.
 
-		if no_argument_passed && block_given?	
-			result = []
-			for elements in self
-				result.push(yield(elements))
+		if block_given? && (argument.is_a? (Integer))
+			accumulator = argument
+			for value in self
+				 accumulator = yield(accumulator,value)
 			end
-			
-			return result
+			return accumulator
 		end
 
 
@@ -166,31 +168,16 @@ module Enumerable
 		return sum
 		end
 	end
+end #Enumerable module end
+	
+	def multiply_els(numbers)
+		result = numbers.my_reduce(:*)
+	end
 
-end #module end
+test = [2,4,5]
 
 
+per =  test.my_reduce(1) { |x,y| x*y }
 
-test = [1,2,3,4,5]
-
-#bob = test.reduce(1, :+)
-per =  test.my_reduce do |x|
-	x += 5
-end
-
-# p test
-#p bob
 p per
-
-
-=begin
-	
-
-	
-
-
-
-	def multiply_els
-	end	
-=end
-	
+p multiply_els(test)
