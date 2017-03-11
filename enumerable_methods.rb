@@ -111,22 +111,14 @@ module Enumerable
 
 	#my_map! would be another method that changes the given array instead of a new one.
 	
-	def my_map(proc = nil)
-		#denne skal kunne ta enten en proce eller en block
-=begin
+	def my_map
+		return to_enum(:my_map) unless block_given?
 		mapped_array = []
 		for elements in self
-			mapped_array.push(proc.call)
+			mapped_array.push(yield(elements))
 		end
 		mapped_array
 
-		#return to_enum(:my_map) unless block_given?
-		#mapped_array = []
-		#for elements in self
-		#	mapped_array.push(yield(elements))
-		#end
-		#mapped_array
-=end
 	end
 
 
@@ -134,14 +126,16 @@ module Enumerable
 
 	
 	#this can apparently be done in 3 lines of code.
+	#does not work with strings
 	def my_reduce(argument = (no_argument_passed = true), args = {})
 		
 		sum = nil
 	
 		#fix here
+		#bruk my each
 		if block_given? 
 			if (argument.is_a? (Integer))
-				accumulator = argument
+				accumulator = argument			
 			end
 			
 			for value in self
@@ -149,7 +143,6 @@ module Enumerable
 			end
 			return accumulator
 		end
-
 
 
 		if (argument.is_a? (Integer)) && (args.is_a? (Symbol))  #If you pass an integer and a symbol
@@ -176,11 +169,20 @@ module Enumerable
 					when :**
 						sum **=x
 				end
-
 			end	
 		return sum
 		end
 	end
+
+	def my_map_modified(&proc)
+		return to_enum(:my_map) unless block_given?
+		new = []
+		self.my_each do |elements|
+			new << proc.call(elements)
+		end
+		new
+	end
+
 end #Enumerable module end
 	
 def multiply_els(numbers)
@@ -189,7 +191,8 @@ end
 
 
 
-p = Proc.new {|x| x * 2 }
+testy = Proc.new {|x| x*2}
+
 
 someNumbers = [2,4,5]
 
@@ -197,11 +200,15 @@ someNumbers = [2,4,5]
 	#x*2
 #end
 
-p someNumbers.my_map(&p)
+p someNumbers.my_map_modified(&testy)
+p someNumbers.my_map_modified{|x| x*5}
 
 
 
 
-#p multiply_els(someNumbers)
+
+
+
+
 
 
