@@ -1,5 +1,4 @@
 
-#.each takes a block and does something based on the items in an array.
 module Enumerable
 
 	def my_each
@@ -123,8 +122,6 @@ module Enumerable
 
 
 	#Apparently the inject and reduce methods are aliases. There is no performance benefit to either.
-
-	
 	#this can apparently be done in 3 lines of code.
 	#does not work with strings
 	def my_reduce(argument = (no_argument_passed = true), args = {})
@@ -191,17 +188,15 @@ end
 
 
 
-testy = Proc.new {|x| x*2}
+
 
 
 someNumbers = [2,4,5]
 
-#test = someNumbers.my_map do |x|
-	#x*2
-#end
-
+testy = Proc.new {|x| x*2}
 p someNumbers.my_map_modified(&testy)
 p someNumbers.my_map_modified{|x| x*5}
+p multiply_els(someNumbers)
 
 
 
