@@ -155,16 +155,11 @@ module Enumerable
 			self.my_each_with_index do |x,i|
 				next if i == 0
 				case symbolCase
-					when :+
-						sum += x
-					when :-
-						sum -= x
-					when :/
-						sum /= x
-					when :*
-						sum *= x
-					when :**
-						sum **=x
+					when :+ then sum += x
+					when :-  then sum -= x
+					when :/  then sum /= x
+					when :* then sum *= x
+					when :**then sum **=x
 				end
 			end	
 		return sum
