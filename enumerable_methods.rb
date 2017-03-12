@@ -172,7 +172,7 @@ module Enumerable
 	end
 
 	def my_map_modified(&proc)
-		return to_enum(:my_map) unless block_given?
+		return to_enum(:my_map_modiefied) unless block_given?
 		new = []
 		self.my_each do |elements|
 			new << proc.call(elements)
